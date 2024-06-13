@@ -9,13 +9,15 @@
 #pragma once
 #define Asar
 
+#include <cstdint>
+
 #include "assocarr.h"
+#include "asar-rust.h"
 #include "libstr.h"
 #include "libsmw.h"
 #include "errors.h"
 #include "warnings.h"
 #include "virtualfile.h"
-#include <cstdint>
 
 extern unsigned const char * romdata_r;
 extern int romlen_r;

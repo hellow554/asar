@@ -99,7 +99,7 @@ macro(set_asar_shared_properties target msvc_lib_type_param enable_sanitizer)
 
 	if(MSVC)
 		target_compile_options(${target} PRIVATE /W3 /EHa)
-		
+
 		# These certainly aren't worth a warning, though
 		target_compile_options(${target} PRIVATE
 			/wd4514 # unreferenced inline function removed
@@ -142,8 +142,16 @@ macro(set_asar_shared_properties target msvc_lib_type_param enable_sanitizer)
 endmacro()
 
 
+include(FetchContent)
+FetchContent_Declare(
+	Corrosion
+	GIT_REPOSITORY https://github.com/corrosion-rs/corrosion.git
+	GIT_TAG v0.5
+)
+FETCHCONTENT_MakeAvailable(Corrosion)
 
-
+corrosion_import_crate(MANIFEST_PATH asar-rust-lib/Cargo.toml)
+corrosion_experimental_cbindgen(TARGET asar_rust HEADER_NAME "asar-rust.h")
 
 # Add shared source files for Asar
 set(ASAR_SHARED_SOURCE_FILES "")
@@ -256,13 +264,14 @@ if(ASAR_GEN_EXE)
 		${ASAR_RESOURCE_FILES}
 		)
 
+	target_link_libraries(asar-standalone PUBLIC asar_rust)
 	set_asar_shared_properties(asar-standalone "T" TRUE)
 
 	if(ASAR_COVERAGE)
 		target_compile_options(asar-standalone PRIVATE -fprofile-arcs -ftest-coverage)
 		SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -lgcov --coverage -fprofile-arcs")
 	endif()
-  
+
 	set_target_properties(asar-standalone
 		PROPERTIES
 		OUTPUT_NAME "asar"
@@ -291,6 +300,7 @@ if(ASAR_GEN_DLL)
 		${ASAR_LIB_RESOURCE_FILES}
 	)
 
+	target_link_libraries(asar PUBLIC asar_rust)
 	target_compile_definitions(asar PRIVATE "ASAR_SHARED")
 	set_asar_shared_properties(asar "T" TRUE)
 
@@ -324,6 +334,8 @@ if (ASAR_GEN_LIB)
 		${ASAR_SHARED_SOURCE_FILES}
 		${ASAR_LIB_RESOURCE_FILES}
 	)
+
+	target_link_libraries(asar-static PUBLIC asar_rust)
 	target_compile_definitions(asar-static PRIVATE "ASAR_STATIC")
 	set_asar_shared_properties(asar-static "D" FALSE)
 

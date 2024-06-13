@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.9.0)
+cmake_minimum_required(VERSION 3.15)
 
 # allows changing the msvc runtime library i think?
 cmake_policy(SET CMP0091 NEW)
