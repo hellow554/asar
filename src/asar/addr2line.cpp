@@ -1,6 +1,5 @@
 #include "addr2line.h"
 #include "asar.h"
-#include "crc32.h"
 
 //////////////////////////////////////////////////////////////////////////
 // Class to store address-to-line mappings for richer symbolic information

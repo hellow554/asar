@@ -1,6 +1,5 @@
 #include <algorithm>
 #include "asar.h"
-#include "crc32.h"
 
 #include "platform/file-helpers.h"
 

@@ -1,5 +1,4 @@
 #include "asar.h"
-#include "crc32.h"
 #include "virtualfile.h"
 #include "platform/file-helpers.h"
 #include "interface-shared.h"
